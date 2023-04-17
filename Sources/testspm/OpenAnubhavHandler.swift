@@ -62,7 +62,33 @@ public class OpenAnubhavHandler: UIView {
         }
     }
     
-   
+    public func anubhavConfigurationBackend(parameters:AnubhavBackend?,completion: @escaping (Result<String, Error>) -> Void) {
+        if parameters?.redirectURL != ""{
+            self.webURLAnubhav = parameters?.redirectURL ?? ""
+            completion(.success(parameters?.redirectURL ?? ""))
+        }else{
+            completion(.failure(NetworkingError_Anubhav.missingData))
+            
+        }
+    }
+    
+    public func anubhavConfigurationSDK(parameters:AnubhavSDK?,completion: @escaping (Result<String, Error>) -> Void) {
+        let authtoken =  AnubhavConfigurationSDK().authparm().authtoken ?? ""
+        if parameters?.customerMobileNumber != "" && parameters?.consentTemplateId != "" && authtoken != "" {
+            Task {
+                do {
+                    let baseURL = try await
+                    URLRequest_Anubhav.shared.usingDirectSDKAnubhav(token: authtoken,parameters: parameters)
+                    self.webURLAnubhav = baseURL.redirectUrl ?? ""
+                    completion(.success(baseURL.redirectUrl ?? ""))
+                } catch {
+                    completion(.failure(error))
+                }
+            }
+        }else{
+            completion(.failure(NetworkingError_Anubhav.missingData))
+        }
+    }
     
     //MARK: - WEB view setup
     public func launch(presentView:UIView) {
