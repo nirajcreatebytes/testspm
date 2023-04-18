@@ -18,14 +18,20 @@ jobs:
     - name: Run tests
       run: swift test -v
 
-    - name: version
-      run: echo "::set-output name=version::$(./bin/azblogfilter --version)"
-      id: version
     - name: release
       uses: actions/create-release@v1
       id: create_release
       with:
-        release_name: ${{ github.run_number }}
+        release_name: Release ${{ github.run_number }}
         tag_name: ${{ github.run_number }} 
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: Uplaod release asset
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./spm.zip
+        asset_name: spm-v${{ github.run_number }}.zip
+        asset_content_type: application/zip
