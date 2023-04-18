@@ -10,6 +10,7 @@ import SystemConfiguration
 #if canImport(FoundationNetworking)
 import FoundationNetworking
 import SystemConfiguration
+import Fastlane
 #endif
 
 #if canImport(concurrency)
@@ -72,3 +73,15 @@ public class URLRequest_Anubhav {
     }
 }
 #endif
+
+
+// Create a class with:
+class FastFile {
+    func testLane() {
+        print("This is a lane")
+    }
+    
+    func helper() {
+        // This is not a lane but can be called from a lane
+    }
+}

@@ -75,16 +75,9 @@ public class OpenAnubhavHandler: UIView {
     public func anubhavConfigurationSDK(parameters:AnubhavSDK?,completion: @escaping (Result<String, Error>) -> Void) {
         let authtoken =  AnubhavConfigurationSDK().authparm().authtoken ?? ""
         if parameters?.customerMobileNumber != "" && parameters?.consentTemplateId != "" && authtoken != "" {
-            Task {
-                do {
-                    let baseURL = try await
-                    URLRequest_Anubhav.shared.usingDirectSDKAnubhav(token: authtoken,parameters: parameters)
-                    self.webURLAnubhav = baseURL.redirectUrl ?? ""
-                    completion(.success(baseURL.redirectUrl ?? ""))
-                } catch {
-                    completion(.failure(error))
-                }
-            }
+     
+                    completion(.success(""))
+              
         }else{
             completion(.failure(NetworkingError_Anubhav.missingData))
         }
