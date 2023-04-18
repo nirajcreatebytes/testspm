@@ -17,7 +17,19 @@ jobs:
       run: swift build -v
     - name: Run tests
       run: swift test -v
- 
+    - name: Generate Version
+      uses: actions/github-script@v5
+      with:
+        script: |
+          const fs = require('fs');
+          console.log(${{ github.workspace }});
+          const packageJson = JSON.parse(fs.readFileSync(${{ github.workspace }}'/Sources/testspm/spmversion.txt', 'utf8'));
+          const version = packageJson.version;
+          const major = version.split('.')[0];
+          const minor = version.split('.')[1];
+          const patch = parseInt(version.split('.')[2]) + 1;
+          const newVersion = `${major}.${minor}.${patch}`;
+          console.log(`::set-env name=NEW_VERSION::${newVersion}`);
     - name: Build project # This would actually build your project, using zip for an example artifact
       run: |
         zip --junk-paths my-artifact README.md
