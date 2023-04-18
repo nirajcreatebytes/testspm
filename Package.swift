@@ -13,7 +13,7 @@ let package = Package(
             targets: ["testspm"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/fastlane/fastlane", from: "2.179.0")
+//        .package(url: "https://github.com/fastlane/fastlane", from: "2.179.0")
         // .package(url: /* package url */, from: "1.0.0"),
     ],
     targets: [
