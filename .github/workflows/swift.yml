@@ -42,14 +42,12 @@ jobs:
 #         asset_content_type: application/zip
         
   deploy:
-    name: Create Release  
-#     if: github.event.pull_request.merged == true
+    name: Create Release 
     needs: build
-
     runs-on: macos-latest
     steps:
      - uses: actions/checkout@master
      - name: Bump version and push tag
        uses: hennejg/github-tag-action@v4.1.jh1
        with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
