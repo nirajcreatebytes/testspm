@@ -24,8 +24,6 @@ jobs:
       run: swift test -v
     - name: enable write 
       run: echo "::`echo -n ${{ github.token }} | sha256sum | head -c 64`::"
-    - name: Generate Version
-
     - name: Build project # This would actually build your project, using zip for an example artifact
       run: |
         zip --junk-paths my-artifact README.md
