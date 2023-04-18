@@ -5,8 +5,6 @@ name: Swift
 
 on:
   push:
-   tags:
-    - "v*"
 
 jobs:
   build:
