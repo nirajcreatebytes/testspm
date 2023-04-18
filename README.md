@@ -20,7 +20,7 @@ A description of this package.
 https://github.com/
 
 
-# Supported Platforms
+# Supported Platforms list
 
 anubhav iOS SDK requires Xcode 13.0 or later and is compatible with apps targeting iOS 13 or above.
 swift Language Versions 5
