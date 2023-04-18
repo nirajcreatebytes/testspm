@@ -10,11 +10,8 @@ on:
 
 jobs:
   build:
-    permissions: 
-      contents: read
-      packages: read
-      checks: write
-      pull-requests: write
+    permissions: read-all|write-all
+   
     runs-on: macos-latest
 
     steps:
