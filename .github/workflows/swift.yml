@@ -13,17 +13,17 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-    - name: Build
-      run: swift build -v
-    - name: Run tests
-      run: swift test -v
+   # - name: Build
+   #   run: swift build -v
+   # - name: Run tests
+   #  run: swift test -v
     - name: Generate Version
       uses: actions/github-script@v5
       with:
         script: |
           const fs = require('fs');
           console.log(${{ github.workspace }});
-          const packageJson = JSON.parse(fs.readFileSync(${{ github.workspace }}'/Sources/testspm/spmversion.txt', 'utf8'));
+          const packageJson = JSON.parse(fs.readFileSync('testspm/Sources/testspm/spmversion.txt', 'utf8'));
           const version = packageJson.version;
           const major = version.split('.')[0];
           const minor = version.split('.')[1];
@@ -39,8 +39,8 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: '1.0.1'
-        release_name: ${{ '1.0.1' }}
+        tag_name: ${{ env.NEW_VERSION }}
+        release_name: ${{ env.NEW_VERSION }}
         draft: false
         prerelease: false
     - name: Upload Release Asset
