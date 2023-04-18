@@ -10,10 +10,8 @@ on:
 
 jobs:
   build:
-    permissions: read-all 
-   
+    permissions: write-all    
     runs-on: macos-latest
-
     steps:
     - uses: actions/checkout@v3
     - name: GitHub Tag Name example
