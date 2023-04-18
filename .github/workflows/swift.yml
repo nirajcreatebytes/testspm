@@ -23,7 +23,7 @@ jobs:
         script: |
           const fs = require('fs');
 
-          const packageJson = JSON.parse(fs.readFileSync('testspm/Sources/testspm/spmversion.txt', 'utf8'));
+          const packageJson = JSON.parse(fs.readFileSync('Sources/testspm/spmversion.txt', 'utf8'));
           const version = packageJson.version;
           const major = version.split('.')[0];
           const minor = version.split('.')[1];
