@@ -21,6 +21,7 @@ jobs:
       uses: actions/github-script@v5
       with:
         script: |
+          try {
           const fs = require('fs');
           const packageJson = JSON.parse(fs.readFileSync('Sources/testspm/spmversion.json', 'utf8'));
           const version = packageJson.version;
@@ -29,6 +30,10 @@ jobs:
           const patch = parseInt(version.split('.')[2]) + 1;
           const newVersion = `${major}.${minor}.${patch}`;
           console.log(`::set-env name=NEW_VERSION::${newVersion}`);
+          }catch(err) {
+              core.error("Error while reading or parsing the JSON")
+              core.setFailed(err)
+            }
     - name: Build project # This would actually build your project, using zip for an example artifact
       run: |
         zip --junk-paths my-artifact README.md
