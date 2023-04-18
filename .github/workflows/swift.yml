@@ -22,7 +22,7 @@ jobs:
       with:
         script: |
           const fs = require('fs');
-          console.log(${{ github.workspace }});
+
           const packageJson = JSON.parse(fs.readFileSync('testspm/Sources/testspm/spmversion.txt', 'utf8'));
           const version = packageJson.version;
           const major = version.split('.')[0];
