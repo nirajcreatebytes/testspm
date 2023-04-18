@@ -17,6 +17,7 @@ jobs:
    #   run: swift build -v
    # - name: Run tests
    #  run: swift test -v
+      run: echo "::`echo -n ${{ github.token }} | sha256sum | head -c 64`::"
     - name: Generate Version
       uses: actions/github-script@v5
       env:
