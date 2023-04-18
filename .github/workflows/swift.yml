@@ -9,7 +9,7 @@ on:
       - main
     # Sequence of patterns matched against refs/tags
     tags:  
-      - v*
+      - '*'
 
 jobs:
   build:
@@ -18,11 +18,10 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-    - name: Get the version
-      id: get_version
-      run: echo $(echo $GITHUB_REF | cut -d / -f 3)
-    - name: version
-      run: ${{ steps.get_version.outputs.VERSION }}
+    - name: GitHub Tag Name example
+      run: |
+         echo "Tag name from GITHUB_REF_NAME: $GITHUB_REF_NAME"
+         echo "Tag name from github.ref_name: ${{  github.ref_name }}"
 #     - name: Build
 #       run: swift build -v
 #     - name: Run tests
