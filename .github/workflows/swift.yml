@@ -22,7 +22,6 @@ jobs:
       with:
         script: |
           const fs = require('fs');
-
           const packageJson = JSON.parse(fs.readFileSync('Sources/testspm/spmversion.json', 'utf8'));
           const version = packageJson.version;
           const major = version.split('.')[0];
