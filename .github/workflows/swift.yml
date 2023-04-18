@@ -21,6 +21,8 @@ jobs:
     - name: Get the version
       id: get_version
       run: echo $(echo $GITHUB_REF | cut -d / -f 3)
+    - name: version
+      run: ${{ steps.get_version.outputs.VERSION }}
 #     - name: Build
 #       run: swift build -v
 #     - name: Run tests
