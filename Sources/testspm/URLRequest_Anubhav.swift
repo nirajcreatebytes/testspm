@@ -13,6 +13,10 @@ import SystemConfiguration
 import Fastlane
 #endif
 
+//@available(macOS 10.15, *){
+//
+//}
+@available(macOS 10.15, *)
 
 public class URLRequest_Anubhav {
     
