@@ -56,5 +56,4 @@ jobs:
           artifactory_host: ${{ secrets.JF_URL }}
       run: |
         echo $artifactory_host
-        curl -X PUT -u${artifactory_username}:${artifactory_password} -H "Accept: application/vnd.swift.registry.v1+json" -F source-archive="@testspm.zip" https://createbytes.jfrog.io/artifactory/api/swift/swift/cbg/cbg/0.0.1
-
+        curl -X PUT -u${artifactory_username}:${artifactory_password} -H "Accept: application/vnd.swift.registry.v1+json" -F source-archive="@testspm.zip" https://createbytes.jfrog.io/artifactory/api/swift/swift/cbg/cbg/${{ github.ref_name }}
