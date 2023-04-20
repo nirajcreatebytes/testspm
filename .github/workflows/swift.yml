@@ -5,8 +5,8 @@ name: Swift
 on:
   push:
     # Sequence of patterns matched against refs/tags
-#     tags:  
-#       - '*'
+#      tags:  
+#        - '*'
 
 jobs:
   build:
@@ -47,5 +47,14 @@ jobs:
         asset_path: ./my-artifact.zip
         asset_name: my-artifact.zip
         asset_content_type: application/zip
-        
+    - name: Swift package
+      run: swift package archive-source
+    - name: Upload to JFrog
+      env:
+          artifactory_username: ${{ secrets.JF_USER }}
+          artifactory_password: ${{ secrets.JF_ACCESS_TOKEN }}
+          artifactory_host: ${{ secrets.JF_URL }}
+      run: |
+        echo $artifactory_host
+        curl -X PUT -u${artifactory_username}:${artifactory_password} -H "Accept: application/vnd.swift.registry.v1+json" -F source-archive="@anubhav.zip" https://createbytes.jfrog.io/artifactory/api/swift/swift/cbg/cbg/0.0.1
 
