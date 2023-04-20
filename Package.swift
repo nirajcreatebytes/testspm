@@ -26,5 +26,5 @@ let package = Package(
             name: "testspmTests",
             dependencies: ["testspm"]),
     ],
-    swiftLanguageVersions: [.v5]
+    swiftLanguageVersions: [.version("5.7")]
 )
