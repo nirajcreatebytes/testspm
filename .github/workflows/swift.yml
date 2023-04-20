@@ -52,7 +52,7 @@ jobs:
     - name: Upload to JFrog
       env:
           artifactory_username: ${{ secrets.JF_USER }}
-          artifactory_password: ${{ secrets.JF_ACCESS_TOKEN }}
+          artifactory_password: ${{ secrets.JF_PASSWORD }}
           artifactory_host: ${{ secrets.JF_URL }}
       run: |
         echo $artifactory_host
