@@ -2,25 +2,32 @@
 name: Swift
 on:
   push:   
-     tags:  
-       - '*'
+#      tags:  
+#        - '*'
 jobs:
   build:
     permissions: write-all    
     runs-on: macos-latest
     steps:
     - uses: actions/checkout@v3  
-    - name: Build
-      run: swift build -v
+#     - name: Build
+#       run: swift build -v
+#     - name: Run tests
+#       run: swift test -v
+#     - name: Generate Release
+#       id: create_release
+#       uses: actions/create-release@v1
+#       env:
+#         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#       with:
+#         tag_name: ${{ github.ref_name }}
+#         release_name: ${{ github.ref_name }}
+#         draft: false
+#         prerelease: false
+
+    - name: Force Xcode 14
+      run: sudo xcode-select -switch /Applications/Xcode_14.1.app
     - name: Run tests
-      run: swift test -v
-    - name: Generate Release
-      id: create_release
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        tag_name: ${{ github.ref_name }}
-        release_name: ${{ github.ref_name }}
-        draft: false
-        prerelease: false
+      run: xcodebuild archive -scheme testxc -sdk iphoneos -archivePath "archives/ios_devices.xcarchive" BUILD_LIBRARY_FOR_DISTRIBUTION=YES SKIP_INSTALL=NO
+    - name: Build
+      run: Build Appxcodebuild archive -scheme testxc -sdk iphonesimulator -archivePath "archives/ios_simulators.xcarchive" BUILD_LIBRARY_FOR_DISTRIBUTION=YES SKIP_INSTALL=NO
