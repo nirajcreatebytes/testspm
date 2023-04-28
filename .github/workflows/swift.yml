@@ -28,6 +28,8 @@ jobs:
 
     - name: Force Xcode 14
       run: sudo xcode-select -switch /Applications/Xcode_14.1.app
+    - name: ghr
+      run: brew install ghr
     - name: ios build
       id: ios_build
       run: xcodebuild archive -project "testxc/testxc.xcodeproj" -scheme testxc -sdk iphoneos -archivePath "archives/ios_devices.xcarchive" BUILD_LIBRARY_FOR_DISTRIBUTION=YES SKIP_INSTALL=NO
@@ -43,4 +45,4 @@ jobs:
        mv build/testxc.xcframework/* final/
        zip -r final.xcframework.zip final/
     - name: Attach ZIP to latest release
-      run: ghr -replace $(git describe -tags --abbrev=0) final.xcframework.zip
+      run: ghr -replace $(git describe --tags --abbrev=0) final.xcframework.zip
