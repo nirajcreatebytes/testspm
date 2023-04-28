@@ -40,5 +40,5 @@ jobs:
       id: final_build
       run: |
         xcodebuild -create-xcframework -framework archives/ios_devices.xcarchive/Products/Library/Frameworks/testxc.framework -framework archives/ios_simulators.xcarchive/Products/Library/Frameworks/testxc.framework -output build/testxc.xcframework
-        cd build && ls
+        cd build/testxc.xcframework && ls
 
