@@ -44,6 +44,11 @@ jobs:
     - name: Create zip
       run: |
        zip -r final2.xcframework.zip build/testxc.xcframework/*
-       mv final2.xcframework.zip ${{ github.workspace }}
 
-   
+
+    - name: Commit and push
+      uses: EndBug/add-and-commit@v7
+      with:
+       add: '["final2.xcframework.zip"]'
+       message: 'My commit message'
+       push: true
