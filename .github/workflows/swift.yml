@@ -1,7 +1,8 @@
 
 name: Swift
 on:
-  push:   
+  push:
+    branches: ['testxc']
 #      tags:  
 #        - '*'
 jobs:
