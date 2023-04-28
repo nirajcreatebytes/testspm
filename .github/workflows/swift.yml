@@ -28,7 +28,11 @@ jobs:
 
     - name: Force Xcode 14
       run: sudo xcode-select -switch /Applications/Xcode_14.1.app
-    - name: Run tests
+    - name: ios build
+      id: ios_build
       run: xcodebuild archive -project "testxc/testxc.xcodeproj" -scheme testxc -sdk iphoneos -archivePath "archives/ios_devices.xcarchive" BUILD_LIBRARY_FOR_DISTRIBUTION=YES SKIP_INSTALL=NO
     - name: Build
+      id: simulator
       run: xcodebuild archive -project "testxc/testxc.xcodeproj" -scheme testxc -sdk iphonesimulator -archivePath "archives/ios_simulators.xcarchive" BUILD_LIBRARY_FOR_DISTRIBUTION=YES SKIP_INSTALL=NO
+    - name: Build app
+      run: xcodebuild -create-xcframework -framework archives/ios_devices.xcarchive/Products/Library/Frameworks/testxc.framework -framework archives/ios_simulators.xcarchive/Products/Library/Frameworks/testxc.framework -output build/testxc.xcframework
