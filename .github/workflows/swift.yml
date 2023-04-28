@@ -44,9 +44,6 @@ jobs:
     - name: Create zip
       run: |
        zip -r final2.xcframework.zip build/testxc.xcframework/*
-    - uses: actions/upload-artifact@v2
-      with:
-        name: ios-xarchive
-        path: |
-           ${{ github.workspace }}/final2.xcframework.zip
+       mv final2.xcframework.zip ${{ github.workspace }}
+
    
