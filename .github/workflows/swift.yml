@@ -43,8 +43,9 @@ jobs:
 
     - name: Create zip
       run: |
-       zip -r final1.xcframework.zip build/testxc.xcframework/*
-    - name: Attach ZIP to latest release
-      env:
-       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: ghr -replace $(git describe --tags --abbrev=0) final1.xcframework.zip
+       zip -r final2.xcframework.zip build/testxc.xcframework/*
+    - uses: actions/upload-artifact@v2
+      with:
+        name: ios-xarchive
+        path: final2.xcframework.zip
+   
