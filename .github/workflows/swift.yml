@@ -37,5 +37,10 @@ jobs:
     - name: Build app
       id: final_build
       run: xcodebuild -create-xcframework -framework archives/ios_devices.xcarchive/Products/Library/Frameworks/testxc.framework -framework archives/ios_simulators.xcarchive/Products/Library/Frameworks/testxc.framework -output build/testxc.xcframework
-    - name: path directory
-      run: ${{final_build}}
+    - name: Create zip
+      run: |
+       mkdir build
+       mv build/testxc.xcframework/* build
+       zip -r final.xcframework.zip build
+    - name: Attach ZIP to latest release
+      run: ghr -replace $(git describe -tags --abbrev=0) final.xcframework.zip
