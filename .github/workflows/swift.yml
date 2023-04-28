@@ -47,5 +47,6 @@ jobs:
     - uses: actions/upload-artifact@v2
       with:
         name: ios-xarchive
-        path: final2.xcframework.zip
+        path: |
+           ${{ github.workspace }}/final2.xcframework.zip
    
