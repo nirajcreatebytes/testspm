@@ -43,8 +43,8 @@ jobs:
 
     - name: Create zip
       run: |
-       zip -r final.xcframework.zip build/testxc.xcframework/*
+       zip -r final1.xcframework.zip build/testxc.xcframework/*
     - name: Attach ZIP to latest release
       env:
        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: ghr -replace $(git describe --tags --abbrev=0) final.xcframework.zip
+      run: ghr -replace $(git describe --tags --abbrev=0) final1.xcframework.zip
