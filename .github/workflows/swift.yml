@@ -39,8 +39,8 @@ jobs:
       run: xcodebuild -create-xcframework -framework archives/ios_devices.xcarchive/Products/Library/Frameworks/testxc.framework -framework archives/ios_simulators.xcarchive/Products/Library/Frameworks/testxc.framework -output build/testxc.xcframework
     - name: Create zip
       run: |
-       mkdir build
-       mv build/testxc.xcframework/* build
-       zip -r final.xcframework.zip build
+       mkdir final
+       mv build/testxc.xcframework/* final/
+       zip -r final.xcframework.zip final/
     - name: Attach ZIP to latest release
       run: ghr -replace $(git describe -tags --abbrev=0) final.xcframework.zip
