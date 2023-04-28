@@ -38,13 +38,7 @@ jobs:
       run: xcodebuild archive -project "testxc/testxc.xcodeproj" -scheme testxc -sdk iphonesimulator -archivePath "archives/ios_simulators.xcarchive" BUILD_LIBRARY_FOR_DISTRIBUTION=YES SKIP_INSTALL=NO
     - name: Build app
       id: final_build
-      run: xcodebuild -create-xcframework -framework archives/ios_devices.xcarchive/Products/Library/Frameworks/testxc.framework -framework archives/ios_simulators.xcarchive/Products/Library/Frameworks/testxc.framework -output build/testxc.xcframework
-    - name: Create zip
       run: |
-       mkdir final
-       mv build/testxc.xcframework/* final/
-       zip -r final.xcframework.zip final/
-    - name: Attach ZIP to latest release
-      env:
-       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: ghr -replace $(git describe --tags --abbrev=0) final.xcframework.zip
+        xcodebuild -create-xcframework -framework archives/ios_devices.xcarchive/Products/Library/Frameworks/testxc.framework -framework archives/ios_simulators.xcarchive/Products/Library/Frameworks/testxc.framework -output build/testxc.xcframework
+        cd build && ls
+
