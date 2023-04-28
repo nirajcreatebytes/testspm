@@ -1,40 +1,54 @@
 //
-//  OpenAnubhav.swift
+//  OpenAnubhavDelegate.swift
 //  
 //
-//  Created by NirajMehta on 30/03/23.
+//  Created by NirajMehta on 03/04/23.
 //
 
 
 import Foundation
-
-
 import WebKit
 #if SWIFT_PACKAGE
 //let frameworkBundle = Bundle.module
 #else
-let frameworkBundle = Bundle(for: OpenAnubhavHandler.self)
+//let frameworkBundle = Bundle(for: OpenAnubhavDelegate.self)
 #endif
-//MARK: - Handler
 #if canImport(UIKit)
 import UIKit
+//MARK: - AnubhavEventDelegate
 
-public class OpenAnubhavHandler: UIView {
+public protocol AnubhavEventDelegate  {
+    func onSuccess(anubhav:AnubhavSuccess)
+    func onExit(anubhav:AnubhavExit)
+    func onEvent(anubhav:AnubhavEvent)
+    
+}
+public extension AnubhavEventDelegate {
+    func onExit(anubhav:AnubhavExit) { }
+    func onEvent(anubhav:AnubhavEvent) {}
+}
+
+
+public class OpenAnubhavDelegate: UIView {
+    
     //MARK: - Variable
-    public var onExit: ((AnubhavExit?) -> ())?
-    public var onSuccess: ((AnubhavSuccess?) -> ())?
-    public var onEvent: ((AnubhavEvent?) -> ())?
-    
-    var webURLAnubhav:String = ""
+    var delegate : AnubhavEventDelegate?
     var containerView = UIView()
-    var anubhavIndicator = UIActivityIndicatorView(style: .large)
+    var webURLAnubhav:String = ""
     
+    lazy var anubhavIndicator: UIActivityIndicatorView = {
+        let activityIndicator = UIActivityIndicatorView()
+        activityIndicator.frame = CGRect(x: 0, y: 0, width:  200.0, height: 200.0)
+        activityIndicator.style = .large
+        activityIndicator.color = UIColor.systemOrange
+        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
+        return activityIndicator
+    }()
     lazy var webKit_Anubhav: WKWebView = {
         let  webConfiguration:WKWebViewConfiguration = WKWebViewConfiguration()
         let userController:WKUserContentController = WKUserContentController()
         userController.add(self, name: MessageHandlers_Anubhav.nativeApp_Handler.rawValue)
         let preferences = WKPreferences()
-        preferences.javaScriptEnabled = true
         webConfiguration.preferences = preferences
         webConfiguration.userContentController = userController
         let webView = WKWebView(frame: .zero, configuration: webConfiguration)
@@ -43,55 +57,81 @@ public class OpenAnubhavHandler: UIView {
         webView.translatesAutoresizingMaskIntoConstraints = false
         return webView
     }()
-    public init() {
+    public init(delegate: AnubhavEventDelegate) {
+        self.delegate = delegate
         super.init(frame: .zero)
         
     }
-    
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
     
     func activityIndicatorAnubhav(views:UIView){
         if views.bounds.size.height != 0.0 {
-            anubhavIndicator.translatesAutoresizingMaskIntoConstraints = false
             views.addSubview(anubhavIndicator)
+            anubhavIndicator.startAnimating()
+            anubhavIndicator.center = views.center
             anubhavIndicator.centerXAnchor.constraint(equalTo: views.centerXAnchor).isActive = true
             anubhavIndicator.centerYAnchor.constraint(equalTo: views.centerYAnchor).isActive = true
-            anubhavIndicator.startAnimating()
-        }
-    }
-    
-    public func anubhavConfigurationBackend(parameters:AnubhavBackend?,completion: @escaping (Result<String, Error>) -> Void) {
-        if parameters?.redirectURL != ""{
-            self.webURLAnubhav = parameters?.redirectURL ?? ""
-            completion(.success(parameters?.redirectURL ?? ""))
-        }else{
-            completion(.failure(NetworkingError_Anubhav.missingData))
             
         }
     }
     
-    public func anubhavConfigurationSDK(parameters:AnubhavSDK?,completion: @escaping (Result<String, Error>) -> Void) {
+    public func anubhavConfigurationBackend(parameters:AnubhavBackend?,presentView:UIView,completion: @escaping (Result<String, Error>) -> Void) {
+        containerView = presentView
+        activityIndicatorAnubhav(views: presentView)
+        if parameters?.requestID != "" && parameters?.redirectURL != ""{
+            self.webURLAnubhav = parameters?.redirectURL ?? ""
+            completion(.success(parameters?.redirectURL ?? ""))
+            self.launchWebview(presentView: presentView, webURL: self.webURLAnubhav)
+        }else{
+            anubhavIndicator.stopAnimating()
+            anubhavIndicator.removeFromSuperview()
+            completion(.failure(NetworkingError_Anubhav.missingData))
+        }
+    }
+    
+    public func anubhavConfigurationSDK(parameters:AnubhavSDK?,presentView:UIView,completion: @escaping (Result<String, Error>) -> Void) {
+        containerView = presentView
+        activityIndicatorAnubhav(views: presentView)
         let authtoken =  AnubhavConfigurationSDK().authparm().authtoken ?? ""
         if parameters?.customerMobileNumber != "" && parameters?.consentTemplateId != "" && authtoken != "" {
-     
-                    completion(.success(""))
-              
+            Task {
+                
+                do {
+                    let baseURL = try await
+                    URLRequest_Anubhav.shared.usingDirectSDKAnubhav(token: authtoken ,parameters: parameters)
+                    self.webURLAnubhav = baseURL.redirectUrl ?? ""
+                    completion(.success(baseURL.redirectUrl ?? ""))
+                    self.launchWebview(presentView: presentView, webURL: self.webURLAnubhav)
+                } catch {
+                    anubhavIndicator.stopAnimating()
+                    anubhavIndicator.removeFromSuperview()
+                    completion(.failure(error))
+                }
+            }
+            
         }else{
+            anubhavIndicator.stopAnimating()
+            anubhavIndicator.removeFromSuperview()
             completion(.failure(NetworkingError_Anubhav.missingData))
         }
     }
     
     //MARK: - WEB view setup
     public func launch(presentView:UIView) {
+        anubhavIndicator.stopAnimating()
+        anubhavIndicator.removeFromSuperview()
         if presentView.bounds.size.height != 0.0 {
+            //            anubhavIndicator.stopAnimating()
+            //            anubhavIndicator.removeFromSuperview()
+            
             containerView = presentView
+            //if presentView.sizeCheck.height != 0.0 {
             defer {
                 if let url = URL(string: webURLAnubhav) {
                     webKit_Anubhav.load(URLRequest(url: url, cachePolicy: NSURLRequest.CachePolicy.reloadIgnoringLocalCacheData ))
                 }
-                
             }
             DispatchQueue.main.async {
                 presentView.backgroundColor = .white
@@ -111,10 +151,11 @@ public class OpenAnubhavHandler: UIView {
         }
     }
     func launchWebview(presentView:UIView,webURL:String?) {
-        containerView = presentView
+        anubhavIndicator.stopAnimating()
+        anubhavIndicator.removeFromSuperview()
+        //        containerView = presentView
         //if presentView.sizeCheck.height != 0.0 {
         defer {
-            
             if let url = URL(string: webURL ?? "") {
                 webKit_Anubhav.load(URLRequest(url: url, cachePolicy: NSURLRequest.CachePolicy.reloadIgnoringLocalCacheData ))
             }
@@ -136,10 +177,9 @@ public class OpenAnubhavHandler: UIView {
             ])
         }
     }
-    
 }
 //MARK: - Web Delegate
-extension OpenAnubhavHandler: WKUIDelegate,WKNavigationDelegate ,WKScriptMessageHandler {
+extension OpenAnubhavDelegate: WKUIDelegate,WKNavigationDelegate ,WKScriptMessageHandler {
     
     public func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
         
@@ -147,16 +187,11 @@ extension OpenAnubhavHandler: WKUIDelegate,WKNavigationDelegate ,WKScriptMessage
             guard let dict = message.body as? [String: AnyObject],let type = dict[MessageHandlers_Anubhav.nativeApp_type.rawValue] as? String,let payload = dict[MessageHandlers_Anubhav.nativeApp_payload.rawValue] as? NSDictionary else {
                 return
             }
-            print(payload)
+            
             if type == MessageHandlers_Anubhav.type_app_success.rawValue{
                 if containerView.bounds.size.height != 0.0 {
                     containerView.removeFromSuperview()
                 }
-                /*  guard
-                 let archivedRecord = try? JSONSerialization.data(withJSONObject: payload),
-                 let datas = try? JSONDecoder().decode(AnubhavSuccess.self, from: archivedRecord)
-                 else { return  } */
-                
                 let requestId = payload["requestId"] as? String  ?? ""
                 let metadata = payload["accounts"] as? [NSDictionary]
                 
@@ -178,13 +213,13 @@ extension OpenAnubhavHandler: WKUIDelegate,WKNavigationDelegate ,WKScriptMessage
                     arry?.append(Institutions.init(fipId: fipId, fipName: fipName))
                 })
                 
-                self.onSuccess?(AnubhavSuccess.init(requestId: requestId, metadata: SuccessMetadata.init(accounts: arryaccounts)  , institutions: arry))
+                delegate?.onSuccess(anubhav:AnubhavSuccess.init(requestId: requestId, metadata: SuccessMetadata.init(accounts: arryaccounts) , institutions: arry))
+                
                 
             }else if type == MessageHandlers_Anubhav.type_onExit.rawValue{
                 if containerView.bounds.size.height != 0.0 {
                     containerView.removeFromSuperview()
                 }
-                
                 let errorCode = payload["errorCode"] as? String  ?? ""
                 let errorType = payload["errorType"] as? String  ?? ""
                 let errorMessage = payload["errorMessage"] as? String  ?? ""
@@ -200,10 +235,9 @@ extension OpenAnubhavHandler: WKUIDelegate,WKNavigationDelegate ,WKScriptMessage
                     arry?.append(Institutions.init(fipId: fipId, fipName: fipName))
                 })
                 
-                self.onExit?(AnubhavExit.init(requestId: requestId, error: AnubhavError.init(errorCode: errorCode, errorType: errorType, errorMessage: errorMessage, displayMessage: displayMessage), metadata: metadata.init(institutions:arry, status: exitStatus)))
+                delegate?.onExit(anubhav: AnubhavExit.init(requestId: requestId, error: AnubhavError.init(errorCode: errorCode, errorType: errorType, errorMessage: errorMessage, displayMessage: displayMessage), metadata: Metadata.init(institutions:arry, status: exitStatus)))
                 
             }else{
-                
                 let name = payload["name"] as? String ?? type
                 let requestId = payload["requestId"] as? String ?? ""
                 
@@ -214,9 +248,9 @@ extension OpenAnubhavHandler: WKUIDelegate,WKNavigationDelegate ,WKScriptMessage
                 let errorMessage = payload["errorMessage"] as? String ?? ""
                 
                 //else other event get here
-                self.onEvent?(AnubhavEvent.init(name: name, requestId: requestId, metadata: Eventmetadata.init(timestamp: timestamp, metadataJson: metadataJson, errorCode: errorCode, errorType: errorType, errorMessage: errorMessage)))
+                
+                delegate?.onEvent(anubhav:AnubhavEvent.init(name: name, requestId: requestId, metadata: Eventmetadata.init(timestamp: timestamp, metadataJson: metadataJson, errorCode: errorCode, errorType: errorType, errorMessage: errorMessage)))
             }
-            
         }
     }
     
@@ -239,6 +273,19 @@ extension OpenAnubhavHandler: WKUIDelegate,WKNavigationDelegate ,WKScriptMessage
             decisionHandler(.cancel)
         }
         
+    }
+    public func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
+        activityIndicatorAnubhav(views: containerView)
+    }
+    
+    public func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+        anubhavIndicator.stopAnimating()
+        anubhavIndicator.removeFromSuperview()
+    }
+    
+    public func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
+        anubhavIndicator.stopAnimating()
+        anubhavIndicator.removeFromSuperview()
     }
 }
 #endif

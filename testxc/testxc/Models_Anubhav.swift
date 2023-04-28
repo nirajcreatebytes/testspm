@@ -9,31 +9,37 @@ import Foundation
 // MARK: - AnubhavSuccess
 public struct AnubhavSuccess: Codable {
     
-    let requestId : String?
-    let metadata : SuccessMetadata?
-    let institutions : [Institutions]?
+    public var requestId : String?
+    public var  metadata : SuccessMetadata?
+    public var  institutions : [Institutions]?
     public enum CodingKeys: String, CodingKey {
         case requestId = "requestId"
         case metadata = "metadata"
         case institutions = "institutions"
     }
-    
+    public init(requestId:String?,metadata: SuccessMetadata?,institutions:[Institutions]?){
+        self.requestId = requestId
+        self.metadata = metadata
+        self.institutions = institutions
+    }
 }
 public struct SuccessMetadata: Codable {
-    let accounts : [Accounts]?
+    public var  accounts : [Accounts]?
     
     public enum CodingKeys: String, CodingKey {
         case accounts = "accounts"
     }
-    
+    public init(accounts:[Accounts]?){
+        self.accounts = accounts
+    }
 }
 
 
 public struct Accounts: Codable {
-    let mask : String?
-    let type : String?
-    let subType : String?
-    let institutionId : String?
+    public var  mask : String?
+    public var  type : String?
+    public var  subType : String?
+    public var  institutionId : String?
     
     public enum CodingKeys: String, CodingKey {
         
@@ -42,59 +48,70 @@ public struct Accounts: Codable {
         case subType = "subType"
         case institutionId = "institutionId"
     }
-    
+    public init(mask:String?,type:String?,subType:String?,institutionId:String?){
+        self.mask = mask
+        self.type = type
+        self.subType = subType
+        self.institutionId = institutionId
+    }
     
 }
 
 public struct Institutions : Codable  {
-    let fipId : String?
-    let fipName : String?
+    public var  fipId : String?
+    public var  fipName : String?
     
     public enum CodingKeys: String, CodingKey {
         
         case fipId = "fipId"
         case fipName = "fipName"
     }
-    
+    public init(fipId:String?,fipName:String){
+        self.fipId = fipId
+        self.fipName = fipName
+    }
     
 }
 
 //MARK: - anubhavOPEN
-public struct AnubhavOPEN: Codable {
-    let requestId : String?
-    let timestamp : String?
-    
-    public enum CodingKeys: String, CodingKey {
-        
-        case requestId = "requestId"
-        case timestamp = "timestamp"
-    }
-    
-    public init(from decoder: Decoder) throws {
-        let values = try decoder.container(keyedBy: CodingKeys.self)
-        requestId = try values.decodeIfPresent(String.self, forKey: .requestId)
-        timestamp = try values.decodeIfPresent(String.self, forKey: .timestamp)
-    }
-    
-}
-public struct metadata: Codable {
-    let institutions : [Institutions]?
-    let status : String?
+//public struct AnubhavOPEN: Codable {
+//    public var  requestId : String?
+//    public var  timestamp : String?
+//
+//    public enum CodingKeys: String, CodingKey {
+//
+//        case requestId = "requestId"
+//        case timestamp = "timestamp"
+//    }
+//
+//    public init(from decoder: Decoder) throws {
+//        let values = try decoder.container(keyedBy: CodingKeys.self)
+//        requestId = try values.decodeIfPresent(String.self, forKey: .requestId)
+//        timestamp = try values.decodeIfPresent(String.self, forKey: .timestamp)
+//    }
+//
+//}
+public struct Metadata: Codable {
+    public var institutions : [Institutions]?
+    public var status : String?
     
     
     public enum CodingKeys: String, CodingKey {
         case institutions = "institutions"
         case status = "status"
     }
-    
+    public init(institutions:[Institutions]?,status:String?){
+        self.institutions = institutions
+        self.status = status
+    }
 }
 
 
 public struct AnubhavError: Codable {
-    let errorCode : String?
-    let errorType : String?
-    let errorMessage : String?
-    let displayMessage : String?
+    public var errorCode : String?
+    public var errorType : String?
+    public var errorMessage : String?
+    public var displayMessage : String?
     
     public enum CodingKeys: String, CodingKey {
         case errorCode = "errorCode"
@@ -102,15 +119,21 @@ public struct AnubhavError: Codable {
         case errorMessage = "errorMessage"
         case displayMessage = "displayMessage"
     }
-    
+    public init(errorCode:String?,errorType:String?,errorMessage:String?,displayMessage:String?){
+        self.errorCode = errorCode
+        self.errorType = errorType
+        self.errorMessage = errorMessage
+        self.displayMessage = displayMessage
+        
+    }
 }
 
 public struct Eventmetadata: Codable {
-    let timestamp: String?
-    let metadataJson: String?
-    let errorCode : String?
-    let errorType : String?
-    let errorMessage : String?
+    public var timestamp: String?
+    public var metadataJson: String?
+    public var errorCode : String?
+    public var errorType : String?
+    public var errorMessage : String?
     
     public enum CodingKeys: String, CodingKey {
         case timestamp = "timestamp"
@@ -119,24 +142,36 @@ public struct Eventmetadata: Codable {
         case errorType = "errorType"
         case errorMessage = "errorMessage"
     }
+    public init(timestamp:String?,metadataJson:String?,errorCode:String?,errorType:String?,errorMessage:String?){
+        self.timestamp = timestamp
+        self.metadataJson = metadataJson
+        self.errorCode = errorCode
+        self.errorType = errorType
+        self.errorMessage = errorMessage
+    }
 }
 public struct AnubhavEvent: Codable {
-    let name : String?
-    let requestId : String?
-    let metadata : Eventmetadata?
+    public var name : String?
+    public var  requestId : String?
+    public var metadata : Eventmetadata?
     
     public enum CodingKeys: String, CodingKey {
         case name = "name"
         case requestId = "requestId"
         case metadata = "metadata"
     }
+    public init(name:String?,requestId:String?,metadata:Eventmetadata?){
+        self.name = name
+        self.requestId = requestId
+        self.metadata = metadata
+    }
 }
 
 //MARK: - anubhavExit
 public struct AnubhavExit: Codable {
-    let requestId : String?
-    let error : AnubhavError?
-    let metadata : metadata?
+    public var requestId : String?
+    public var error : AnubhavError?
+    public var metadata : Metadata?
     
     public enum CodingKeys: String, CodingKey {
         case requestId = "requestId"
@@ -144,12 +179,17 @@ public struct AnubhavExit: Codable {
         case error = "error"
         
     }
-    
+    public init(requestId:String?,error:AnubhavError?,metadata:Metadata?){
+        self.requestId = requestId
+        self.error = error
+        self.metadata = metadata
+        
+    }
 }
 
 //MARK: - Auth Request Model
 public struct Auth : Codable {
-    let authtoken: String?
+    public var authtoken: String?
     public enum CodingKeys: String, CodingKey {
         case authtoken = "auth"
     }
@@ -159,8 +199,8 @@ public struct Auth : Codable {
 }
 //MARK: - Backend Request Model
 public struct AnubhavBackend : Codable {
-    let requestID: String?
-    let redirectURL: String?
+    public var requestID: String?
+    public var redirectURL: String?
     
     public enum CodingKeys: String, CodingKey {
         case requestID = "requestId"
@@ -198,16 +238,20 @@ public class AnubhavConfigurationBackend {
 
 //MARK: - RedirectURL Response Model
 public struct AnubhavRedirectURL: Codable {
-    let consentHandle : String?
-    let redirectUrl : String?
-    let webviewBaseUrl : String?
+    public var consentHandle : String?
+    public var redirectUrl : String?
+    public var webviewBaseUrl : String?
     
     enum CodingKeys: String, CodingKey {
         case consentHandle = "consentHandle"
         case redirectUrl = "redirectUrl"
         case webviewBaseUrl = "webviewBaseUrl"
     }
-    
+    public init(consentHandle:String?,redirectUrl:String?,webviewBaseUrl:String?){
+        self.consentHandle = consentHandle
+        self.redirectUrl = redirectUrl
+        self.webviewBaseUrl = webviewBaseUrl
+    }
 }
 
 //MARK: - RedirectURL Request Model
@@ -249,12 +293,12 @@ final public class AnubhavConfigurationSDK {
     }
 }
 public struct AnubhavSDK : Codable {
-    let customerMobileNumber : String?
-    let consentTemplateId : String?
-    let customerAAId : String?
-    let accountFilters : [String]?
-    let webhook : Webhook?
-    let rules : [String]?
+    public var customerMobileNumber : String?
+    public var consentTemplateId : String?
+    public var customerAAId : String?
+    public var accountFilters : [String]?
+    public var webhook : Webhook?
+    public var rules : [String]?
     
     public enum CodingKeys: String, CodingKey {
         
@@ -278,10 +322,10 @@ public struct AnubhavSDK : Codable {
 }
 
 public struct Webhook : Codable {
-    let analyzedDataPush : String?
-    let consentStatus : String?
-    let rawDataPush : String?
-    let addOnParams : AddOnParams?
+    public var analyzedDataPush : String?
+    public var consentStatus : String?
+    public var rawDataPush : String?
+    public var addOnParams : AddOnParams?
     
     public enum CodingKeys: String, CodingKey {
         
@@ -299,7 +343,7 @@ public struct Webhook : Codable {
 }
 
 public struct AddOnParams : Codable {
-    let param1 : String?
+    public var param1 : String?
     
     public enum CodingKeys: String, CodingKey {
         case param1 = "param1"

@@ -10,16 +10,16 @@ import SystemConfiguration
 #if canImport(FoundationNetworking)
 import FoundationNetworking
 import SystemConfiguration
-import Fastlane
 #endif
 
-#if canImport(concurrency)
+@available(macOS 10.15, *)
 public class URLRequest_Anubhav {
     
     public static let shared = URLRequest_Anubhav()
     
     public init() { }
-    
+#if compiler(>=5.5) && canImport(_Concurrency)
+//#if canImport(concurrency)
     public func usingDirectSDKAnubhav(token:String?,parameters:AnubhavSDK?) async throws -> AnubhavRedirectURL {
         
         if isInternetAvailable() == false{
@@ -49,6 +49,7 @@ public class URLRequest_Anubhav {
         }
         return result
     }
+#endif
     func isInternetAvailable() -> Bool {
         var zeroAddress = sockaddr_in(sin_len: 0, sin_family: 0, sin_port: 0, sin_addr: in_addr(s_addr: 0), sin_zero: (0, 0, 0, 0, 0, 0, 0, 0))
         zeroAddress.sin_len = UInt8(MemoryLayout.size(ofValue: zeroAddress))
@@ -72,16 +73,4 @@ public class URLRequest_Anubhav {
         
     }
 }
-#endif
 
-
-// Create a class with:
-class FastFile {
-    func testLane() {
-        print("This is a lane")
-    }
-    
-    func helper() {
-        // This is not a lane but can be called from a lane
-    }
-}
