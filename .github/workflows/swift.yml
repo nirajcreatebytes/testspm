@@ -45,4 +45,6 @@ jobs:
        mv build/testxc.xcframework/* final/
        zip -r final.xcframework.zip final/
     - name: Attach ZIP to latest release
+      env:
+       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: ghr -replace $(git describe --tags --abbrev=0) final.xcframework.zip
