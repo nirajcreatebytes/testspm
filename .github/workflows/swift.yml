@@ -44,13 +44,12 @@ jobs:
     - name: Create zip
       run: |
        zip -r anubhav.xcframework.zip build/testxc.xcframework/*
-       ls
-       mkdir build
-       mv anubhav.xcframework.zip /build/
-
-    - name: Commit and push
-      uses: EndBug/add-and-commit@v7
-      with:
-       add: '["anubhav.xcframework.zip"]'
-       message: 'zip generated successfully'
-       push: true
+    - name: Upload to JFrog
+      env:
+        artifactory_username: ${{ secrets.JF_USER }}
+        artifactory_password: ${{ secrets.JF_PASSWORD }}
+        artifactory_host: ${{ secrets.JF_URL }}
+      run: |
+        echo $artifactory_host
+        curl -X PUT -u${artifactory_username}:${artifactory_password} -H "Accept: application/vnd.swift.registry.v1+json" -F source-archive="anubhav.xcframework.zip" https://createbytes.jfrog.io/artifactory/api/swift/swift/anubhav/anubhav.zip
+ 
