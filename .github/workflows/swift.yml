@@ -51,5 +51,5 @@ jobs:
         artifactory_host: ${{ secrets.JF_URL }}
       run: |
         echo $artifactory_host
-        curl -X PUT -u${artifactory_username}:${artifactory_password} -H "Accept: application/vnd.swift.registry.v1+json" -F source-archive="anubhav.xcframework.zip" https://createbytes.jfrog.io/artifactory/api/swift/swift/anubhav/anubhav.zip
+        curl -X PUT -u${artifactory_username}:${artifactory_password} -H "Accept: application/vnd.swift.registry.v1+json" -F source-archive="@anubhav.xcframework.zip" https://createbytes.jfrog.io/artifactory/api/swift/swift/anubhav/anubhav.zip
  
