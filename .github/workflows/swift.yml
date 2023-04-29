@@ -43,8 +43,8 @@ jobs:
 
     - name: Create zip
       run: |
-       
        zip -r anubhav.xcframework.zip build/testxc.xcframework/*
+       mv anubhav.xcframework.zip /build/
 
     - uses: actions/upload-artifact@v2
       with:
