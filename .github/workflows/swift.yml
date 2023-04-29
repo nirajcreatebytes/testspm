@@ -43,12 +43,17 @@ jobs:
 
     - name: Create zip
       run: |
+       
        zip -r anubhav.xcframework.zip build/testxc.xcframework/*
 
-
-    - name: Commit and push
-      uses: EndBug/add-and-commit@v7
+    - uses: actions/upload-artifact@v2
       with:
-       add: '["anubhav.xcframework.zip"]'
-       message: 'zip generated successfully'
-       push: true
+        name: ios-xarchive
+        path: |
+          build/anubhav.xcframework.zip
+#     - name: Commit and push
+#       uses: EndBug/add-and-commit@v7
+#       with:
+#        add: '["anubhav.xcframework.zip"]'
+#        message: 'zip generated successfully'
+#        push: true
