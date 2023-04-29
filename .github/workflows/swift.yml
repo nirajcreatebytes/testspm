@@ -10,9 +10,7 @@ jobs:
     permissions: write-all    
     runs-on: macos-latest
     steps:
-    - uses: actions/checkout@v3  
-    - name: Create XCFramework
-      uses: unsignedapps/swift-create-xcframework@v2
+    - uses: actions/checkout@v3
 #     - name: Build
 #       run: swift build -v
 #     - name: Run tests
@@ -28,29 +26,29 @@ jobs:
 #         draft: false
 #         prerelease: false
 
-#     - name: Force Xcode 14
-#       run: sudo xcode-select -switch /Applications/Xcode_14.1.app
-#     - name: ghr
-#       run: brew install ghr
-#     - name: ios build
-#       id: ios_build
-#       run: xcodebuild archive -project "testxc/testxc.xcodeproj" -scheme testxc -sdk iphoneos -archivePath "archives/ios_devices.xcarchive" BUILD_LIBRARY_FOR_DISTRIBUTION=YES SKIP_INSTALL=NO
-#     - name: Build
-#       id: simulator
-#       run: xcodebuild archive -project "testxc/testxc.xcodeproj" -scheme testxc -sdk iphonesimulator -archivePath "archives/ios_simulators.xcarchive" BUILD_LIBRARY_FOR_DISTRIBUTION=YES SKIP_INSTALL=NO
-#     - name: Build app
-#       id: final_build
-#       run: |
-#         xcodebuild -create-xcframework -framework archives/ios_devices.xcarchive/Products/Library/Frameworks/testxc.framework -framework archives/ios_simulators.xcarchive/Products/Library/Frameworks/testxc.framework -output build/testxc.xcframework
+    - name: Force Xcode 14
+      run: sudo xcode-select -switch /Applications/Xcode_14.1.app
+    - name: ghr
+      run: brew install ghr
+    - name: ios build
+      id: ios_build
+      run: xcodebuild archive -project "testxc/testxc.xcodeproj" -scheme testxc -sdk iphoneos -archivePath "archives/ios_devices.xcarchive" BUILD_LIBRARY_FOR_DISTRIBUTION=YES SKIP_INSTALL=NO
+    - name: Build
+      id: simulator
+      run: xcodebuild archive -project "testxc/testxc.xcodeproj" -scheme testxc -sdk iphonesimulator -archivePath "archives/ios_simulators.xcarchive" BUILD_LIBRARY_FOR_DISTRIBUTION=YES SKIP_INSTALL=NO
+    - name: Build app
+      id: final_build
+      run: |
+        xcodebuild -create-xcframework -framework archives/ios_devices.xcarchive/Products/Library/Frameworks/testxc.framework -framework archives/ios_simulators.xcarchive/Products/Library/Frameworks/testxc.framework -output build/testxc.xcframework
 
-#     - name: Create zip
-#       run: |
-#        zip -r final2.xcframework.zip build/testxc.xcframework/*
+    - name: Create zip
+      run: |
+       zip -r anubhav.xcframework.zip build/testxc.xcframework/*
 
 
-#     - name: Commit and push
-#       uses: EndBug/add-and-commit@v7
-#       with:
-#        add: '["final2.xcframework.zip"]'
-#        message: 'My commit message'
-#        push: true
+    - name: Commit and push
+      uses: EndBug/add-and-commit@v7
+      with:
+       add: '["anubhav.xcframework.zip"]'
+       message: 'zip generated successfully'
+       push: true
