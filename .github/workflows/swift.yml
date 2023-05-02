@@ -26,7 +26,7 @@ jobs:
 #         draft: false
 #         prerelease: false
 
-    - name: Force Xcode 14
+    - name: Setup Xcode 14
       run: sudo xcode-select -switch /Applications/Xcode_14.1.app
     - name: ghr
       run: brew install ghr
